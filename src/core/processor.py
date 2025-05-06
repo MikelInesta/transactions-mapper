@@ -12,7 +12,9 @@ class TransactionProcessor:
     def process_file(self, input_path: Path, output_path: Path, 
                     payee_column: str = 'payee',
                     date_column: Optional[str] = None,
-                    amount_column: Optional[str] = None) -> None:
+                    amount_column: Optional[str] = None,
+                    skip_rows: int = 0,
+                    clean_data: bool = True) -> None:
         """
         Process a transaction file and save the standardized version.
         
@@ -22,12 +24,22 @@ class TransactionProcessor:
             payee_column: Name of the column containing payee information
             date_column: Name of the date column (optional)
             amount_column: Name of the amount column (optional)
+            skip_rows: Number of rows to skip at the beginning of the file (for headers, images, etc.)
+            clean_data: Whether to clean the data by removing empty rows and columns
         """
         # Read the input file
-        if input_path.suffix.lower() == '.xlsx':
-            df = pd.read_excel(input_path)
+        if '.xls' in input_path.suffix.lower():
+            df = pd.read_excel(input_path, skiprows=skip_rows)
         else:
-            df = pd.read_csv(input_path)
+            df = pd.read_csv(input_path, skiprows=skip_rows)
+        
+        if clean_data:
+            # Remove rows where all values are NaN
+            df = df.dropna(how='all')
+            # Remove columns where all values are NaN
+            df = df.dropna(axis=1, how='all')
+            # Reset the index after cleaning
+            df = df.reset_index(drop=True)
         
         # Apply mappings to payee column
         if payee_column in df.columns:
