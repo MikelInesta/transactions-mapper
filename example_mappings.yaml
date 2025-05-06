@@ -1,0 +1,16 @@
+mappings:
+  - pattern: "Argentaliaq34bsfMar28"
+    replacement: "Grocery Store A"
+    description: "Main grocery store in the neighborhood"
+  
+  - pattern: "GROCERY.*STORE.*A"
+    replacement: "Grocery Store A"
+    description: "Alternative format for Grocery Store A"
+  
+  - pattern: "RESTAURANT.*BISTRO.*XYZ"
+    replacement: "Bistro XYZ"
+    description: "Local restaurant"
+  
+  - pattern: "PAYMENT.*TO.*UTILITY.*COMPANY"
+    replacement: "Utility Company"
+    description: "Monthly utility payments" 
